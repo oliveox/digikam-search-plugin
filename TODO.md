@@ -1,0 +1,42 @@
+# TODO
+- cache searches
+- fix nested categories search 
+- test features on windows / linux
+- fix display feature
+- insert objects as tags inside DigiKam
+- introduce stacktrace logging on errors (preferably on ts files)
+- expore the File.hasMany(allMediaTypes) for easier adapters
+- use shared types between backend and server (Typescript)
+- file types <-> object tables association
+- proper error handling
+- automatically analyse digikam items when server is launched
+- dockerize the application
+- automatically analyse (if not already) the digikam album at serve launch time
+- don't restrict config and media folders naming
+- unit / integration tests
+- custom UI for videos (skip to specific contained objects)
+- user configurable yolo version
+- treat timelapses differently
+    - don't analyse each other shot if they are too similar
+- user configurable GPU / CPU processing
+    - readme guide for cuda
+- verify environment variables validity
+- add types to Python code
+- logging to file and console
+- support for multiple Digikam root albums
+- restart Digikam after object analysis / DigiKam hot reload 
+
+# Done
+- remove all commented / unused code 
+- replace sqlite3 with sequelize
+- remove checksum determination for each file type
+    - take checksum from digikam
+- ml server (Flask)
+    - models have to be initialised only once after setting alive
+- new paradigm: no files upload, only digikam entities
+- server - ml service interaction
+- use an ORM
+- replace server and UI npm packages that have vulnerabitiles
+- fix server memory leak (continoush worker spawning)
+- extract / store frameNr - objects map
+- React UI

@@ -1,0 +1,19 @@
+{
+    // "extends": "@tsconfig/node14/tsconfig.json",
+    "compilerOptions": {
+      "lib": ["es2019", "DOM"],
+      "outDir": "./dist",
+      "allowJs": true,
+      "target": "es6",
+      "module": "commonjs",
+      "esModuleInterop": true, // support 'export default'
+      "strict": true,
+      "declaration": true,
+      "declarationDir": "declarations",
+      "sourceMap": true,
+      "noEmitOnError": true,
+      "watch": true
+    },
+    "include": ["./src"],
+    "exclude": ["node_modules"]
+}
