@@ -62,16 +62,6 @@ Run them in background or have 3 active dedicated terminals, your call.
 	- make a *GET* request to *localhost:3001/analyse* to trigger the digiKam DB data import and file analysis. Wait for it to end ...
 	- open *localhost:3000*, have fun!
 
-## Functionalities
-- search by:
-    - media files metadata
-    - digikam categories
-    - filename
-    - media file type
-- get search result (as symbolik links) in a path available file manager (e.g.nautilis, explorer etc.)
-- upload files from another (non-digikam) path
-    - won't have the categories available on it
-
 # Support
 - DigiKam tags (also called *categories*) functionality doesn't work if tags contain '`_`' (underscores)
 - `Show in file manager` button doesn't normally work on Windows. The default security policy allows only administrators to create symbolic links.
