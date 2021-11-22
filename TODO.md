@@ -1,9 +1,12 @@
 # TODO
+- search by contained objects
+- insert objects as tags inside DigiKam
+
+- put URL requirment in requirments.txt for python service
 - cache searches
 - fix nested categories search 
 - test features on windows / linux
 - fix display feature
-- insert objects as tags inside DigiKam
 - introduce stacktrace logging on errors (preferably on ts files)
 - expore the File.hasMany(allMediaTypes) for easier adapters
 - use shared types between backend and server (Typescript)

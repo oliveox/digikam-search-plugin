@@ -22,7 +22,7 @@ type AppState = {
 class App extends React.Component<{}, AppState> {
 
   state = {
-    searchOptions: {metadata: [], categories: []},
+    searchOptions: {metadata: [], categories: [], visualObjects: []},
     mediaUnits: [],
     textFieldSearch: "",
     checkedMetadata: [],
@@ -41,7 +41,7 @@ class App extends React.Component<{}, AppState> {
     })
     .catch(err => this.setState({error: err}))
 
-    fetch("http://localhost:3001/search/menu")
+    fetch("http://localhost:3001/menu")
     .then(res => res.json())
     .then(res => {
       this.setState({
@@ -96,14 +96,14 @@ class App extends React.Component<{}, AppState> {
       body: JSON.stringify(body)
     }
 
-    fetch("http://localhost:3001/gallery/search", requestOptions)
+    fetch("http://localhost:3001/gallery", requestOptions)
     .then(res => res.json())
     .then(res => this.setState({mediaUnits: res}))
   }
 
   render() {
 
-    let error = null;
+    let error;
 
     // SEARCH MENU
 
@@ -141,14 +141,17 @@ class App extends React.Component<{}, AppState> {
 
     // checkboxes
     const searchMenuData = this.state.searchOptions;
-    let metadataSearchMenu = null;
-    let categoriesSearchMenu = null;
+    let metadataSearchMenu;
+    let categoriesSearchMenu;
+    let visualObjectsMenu;
+    
     if (searchMenuData) {
-       metadataSearchMenu = searchMenuData["metadata"] ? 
+       
+      metadataSearchMenu = searchMenuData.metadata ? 
        (
         <React.Fragment>
           <CheckboxTree 
-            nodes={searchMenuData["metadata"]} 
+            nodes={searchMenuData.metadata} 
             onlyLeafCheckboxes={true}
             checkHandler={this.onMetadataSearchHandler}
           />
@@ -156,11 +159,25 @@ class App extends React.Component<{}, AppState> {
        ) 
        : 
        null;
-       categoriesSearchMenu = searchMenuData["categories"] ? 
+
+       categoriesSearchMenu = searchMenuData.categories ? 
        (
         <React.Fragment>
           <CheckboxTree 
-            nodes={searchMenuData["categories"]} 
+            nodes={searchMenuData.categories} 
+            onlyLeafCheckboxes={false}
+            checkHandler={this.onCategorySearchHandler}
+          />
+        </React.Fragment>
+       ) 
+       : 
+       null;
+
+       visualObjectsMenu = searchMenuData.visualObjects ? 
+       (
+        <React.Fragment>
+          <CheckboxTree 
+            nodes={searchMenuData.visualObjects} 
             onlyLeafCheckboxes={false}
             checkHandler={this.onCategorySearchHandler}
           />
@@ -192,6 +209,8 @@ class App extends React.Component<{}, AppState> {
                 {metadataSearchMenu}
               <h4>Categories</h4>
                 {categoriesSearchMenu}
+              <h4>Objects</h4>
+                {visualObjectsMenu}
           </Col>
           <Col sm={9}>
             <Gallery 
