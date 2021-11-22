@@ -1,9 +1,9 @@
-import bodyParser from 'body-parser';
-import express from 'express';
-import display_filesystem from '../controllers/display';
+import bodyParser from 'body-parser'
+import express from 'express'
+import displayInFileExplorer from '../controllers/display'
 
-const router = express.Router();
+const router = express.Router()
 
-router.post('/', bodyParser.text({type: '*/*'}), display_filesystem);
+router.post('/', bodyParser.text({ type: '*/*' }), displayInFileExplorer)
 
-export default router;
+export default router

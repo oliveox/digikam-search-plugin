@@ -19,11 +19,16 @@ const test_importDigiKam = async () => {
     console.log(results);
 }
 
+const play = () => {
+    return;
+}
+
 (async() => {
     try {
-        await test_postgresInit();
-        await test_importDigiKam();
-        await analyseInternalDBFiles();
+        console.log(typeof play)
+        // await test_postgresInit();
+        // await test_importDigiKam();
+        // await analyseInternalDBFiles();
     } catch (err) {
         console.error(err);
     }

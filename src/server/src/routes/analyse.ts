@@ -1,8 +1,8 @@
-import express from 'express';
-import { analyseFiles } from '../controllers/analyse';
+import express from 'express'
+import { importAndAnalyseFiles } from '../controllers/analyse'
 
-const router = express.Router();
+const router = express.Router()
 
-router.get('/', analyseFiles);
+router.get('/', importAndAnalyseFiles)
 
-export default router;
+export default router

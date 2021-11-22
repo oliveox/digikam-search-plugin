@@ -88,7 +88,7 @@ class DigiKamUtils {
         let albumRootIdentifierPathMap: any = {};
         let albumRootIdenfitiers;
         try {
-            albumRootIdenfitiers = await this.getAlbumRootIdentifiers();
+            albumRootIdenfitiers = await DigiKamUtils.getAlbumRootIdentifiers();
 
             if (!albumRootIdenfitiers || albumRootIdenfitiers.length == 0) 
                 throw `No album root identifiers found.`

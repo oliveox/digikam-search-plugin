@@ -1,8 +1,16 @@
-import express from 'express';
-const router = express.Router();
+import bodyParser from 'body-parser'
+import express from 'express'
+import { getAlldGalleryFiles, getSearchedGalleryFiles, getSearchMenu }
+	from '../controllers/home'
 
-router.get('/', (req, res) => {
-    res.redirect('/gallery')
-});
+const router = express.Router()
 
-export default router;
+router.get('/gallery', getAlldGalleryFiles)
+router.get('/menu', getSearchMenu)
+router.post(
+	'/gallery',
+	bodyParser.text({ type: '*/*' }),
+	getSearchedGalleryFiles
+)
+
+export default router
