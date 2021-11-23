@@ -2,6 +2,8 @@
 - search by contained objects
 - insert objects as tags inside DigiKam
 
+- replace search menu nesting split character technique with a collection (e.g. json)
+- replace "categories" naming with "tags"
 - put URL requirment in requirments.txt for python service
 - cache searches
 - fix nested categories search 
