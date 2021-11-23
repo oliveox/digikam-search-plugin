@@ -3,7 +3,7 @@ import { QueryTypes } from 'sequelize';
 import url from 'url';
 import logger from '../../config/winston';
 import { FilesByLabelType } from '../../types/fManagerTypes';
-import { digiKamDB } from '../dbConnections';
+import { DigiKamDB } from '../dbConnections';
 
 const fs = require('fs').promises;
 const si = require('systeminformation');
@@ -74,7 +74,7 @@ class DigiKamAdapter {
     }
 
     static getDigiKamFiles = async () => {
-        const results = await digiKamDB.query(
+        const results = await DigiKamDB.query(
                     getAllDigiKamFilesQuery, {type: QueryTypes.SELECT});
         return results;
     }
@@ -121,7 +121,7 @@ class DigiKamUtils {
     }
 
     static getAlbumRootIdentifiers = async (): Promise<Array<any>> => {
-        const result = await digiKamDB.query(
+        const result = await DigiKamDB.query(
             getAlbumRootsIdentifiersQuery, {type: QueryTypes.SELECT}
         );
         return result.map(label => Object.values(label)[0]);
@@ -131,7 +131,7 @@ class DigiKamUtils {
                                                 Promise<Array<string>> => {
 
         const results: any = 
-            await digiKamDB.query(getOneTagTreeLevelQuery, {
+            await DigiKamDB.query(getOneTagTreeLevelQuery, {
                 replacements: [parentID],
                 type: QueryTypes.SELECT
             })
@@ -141,7 +141,7 @@ class DigiKamUtils {
 
     static getTagLabelByID = async (tagID: string): Promise<string> => {
 
-        const results = await digiKamDB.query(getTagLabelByIDQuery,
+        const results = await DigiKamDB.query(getTagLabelByIDQuery,
             {
                 replacements: [tagID],
                 type: QueryTypes.SELECT
@@ -154,7 +154,7 @@ class DigiKamUtils {
                                         Promise<Array<any>> => {
         const placeholder: string = labels.map(() => "?").join(",");
         const query = DigiKamUtils.getFilesByLabels(placeholder);
-        const result = await digiKamDB.query(query, 
+        const result = await DigiKamDB.query(query, 
             {replacements: [labels], type: QueryTypes.SELECT}
         );
         return result;
