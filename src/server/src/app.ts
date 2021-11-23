@@ -1,5 +1,5 @@
 import express from 'express'
-import { internalDB } from './adapters/dbConnections.js'
+import { InternalDB } from './adapters/dbConnections.js'
 import { config } from './config/config'
 import analyseRouter from './routes/analyse'
 import displayRouter from './routes/display'
@@ -32,10 +32,10 @@ app.use((req, res) => {
 
 (async () => {
 	try {
-		await internalDB.authenticate()
+		await InternalDB.authenticate()
 		console.log('Internal DB connection ON')
 
-		await internalDB.sync()
+		await InternalDB.sync()
 		console.log('Synchronized model with Internal DB')
 
 		app.listen(port, () => {

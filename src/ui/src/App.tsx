@@ -15,6 +15,7 @@ type AppState = {
   textFieldSearch: string,
   checkedMetadata: Array<any>,
   checkedCategories: Array<any>,
+  checkedVisualObjects: Array<any>,
   error: string,
   uploadFiles: Array<any>
 };
@@ -27,6 +28,7 @@ class App extends React.Component<{}, AppState> {
     textFieldSearch: "",
     checkedMetadata: [],
     checkedCategories: [],
+    checkedVisualObjects: [],
     error: "",
     uploadFiles: []
   }
@@ -64,6 +66,10 @@ class App extends React.Component<{}, AppState> {
     this.setState({checkedCategories: checked}, this.getGallery);
   }
 
+  onVisualObjectsSearchHandler = (checked: Array<any>) => {
+    this.setState({checkedVisualObjects: checked}, this.getGallery);
+  }
+
   onFileManagerButtonClick = () => {
     const displayedFilepaths = this.state.mediaUnits.map((m: any) => m.filePath);
     
@@ -87,7 +93,8 @@ class App extends React.Component<{}, AppState> {
     let body = {
       textField: this.state.textFieldSearch,
       metadata: this.state.checkedMetadata,
-      categories: this.state.checkedCategories
+      categories: this.state.checkedCategories,
+      visualObjects: this.state.checkedVisualObjects
     };
 
     const requestOptions = {
@@ -179,7 +186,7 @@ class App extends React.Component<{}, AppState> {
           <CheckboxTree 
             nodes={searchMenuData.visualObjects} 
             onlyLeafCheckboxes={false}
-            checkHandler={this.onCategorySearchHandler}
+            checkHandler={this.onVisualObjectsSearchHandler}
           />
         </React.Fragment>
        ) 

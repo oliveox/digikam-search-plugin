@@ -64,18 +64,17 @@ export async function getSearchMenu (
 		const visualObjectsQueryResult: Array<any> = await VisualObject.findAll({
 			attributes: ['id', 'name'], raw: true
 		})
-		let visualObjects = GeneralUtilsService.jsonToCheckboxTreeStructure({
+		const visualObjects = GeneralUtilsService.jsonToCheckboxTreeStructure({
 			objects: visualObjectsQueryResult.map(v => v.name)
 		})
-		visualObjects[0].children = visualObjects.map((v, i) => v.value=visualObjectsQueryResult[i].id)
-		
+
 		// format response
 		const response = {
 			metadata: GeneralUtilsService.jsonToCheckboxTreeStructure(metadata),
 			categories: GeneralUtilsService.jsonToCheckboxTreeStructure(
 				digiKamCategories
 			),
-			visualObjects: GeneralUtilsService.jsonToCheckboxTreeStructure({ objects: visualObjects })
+			visualObjects: visualObjects
 		}
 
 		// return response
