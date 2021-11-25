@@ -1,35 +1,39 @@
-import { internalDB } from "./adapters/dbConnections";
-import { analyseInternalDBFiles } from "./services/analyse";
-import { importDigiKamFileData } from "./services/digikamImport";
+import { InternalDB } from './adapters/dbConnections'
+import { getVisualObjectsSearchConditions } from './adapters/internal/file'
+import { exportObjectsToDigiKam, importDigiKamFilesService } from './services/digikam'
 
 const test_postgresInit = async () => {
-    try {
-        await internalDB.authenticate();
-        console.log("DB connection ON");
+	try {
+		await InternalDB.authenticate()
+		console.log('DB connection ON')
 
-        await internalDB.sync()
-        console.log("Synchronized model with DB");
-    } catch (err) {
-        console.error(`Can't conenct to DB: ${err}`);
-    }
+		await InternalDB.sync()
+		console.log('Synchronized model with DB')
+	} catch (err) {
+		console.error(`Can't conenct to DB: ${err}`)
+	}
 }
 
-const test_importDigiKam = async () => {
-    const results = await importDigiKamFileData();
-    console.log(results);
+async function test_importDigiKam() {
+    const results = await importDigiKamFilesService()
+    console.log(results)
 }
 
 const play = () => {
-    return;
+	return
 }
 
 (async() => {
-    try {
-        console.log(typeof play)
-        // await test_postgresInit();
-        // await test_importDigiKam();
-        // await analyseInternalDBFiles();
-    } catch (err) {
-        console.error(err);
-    }
+	try {
+		await exportObjectsToDigiKam()
+        // const fileIds = await getVisualObjectsSearchConditions(['kite', 'bird'])
+		// console.log(typeof play)
+		// await test_postgresInit();
+		// await test_importDigiKam();
+		// await analyseInternalDBFiles();
+
+        console.log()
+	} catch (err) {
+		console.error(err)
+	}
 })()

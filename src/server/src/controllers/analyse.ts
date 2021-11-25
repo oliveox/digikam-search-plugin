@@ -1,19 +1,15 @@
 import { Request, Response } from 'express'
 import logger from '../config/winston'
 import { analyseInternalDBFiles } from '../services/analyse'
-import { importDigiKamFileData } from '../services/digikamImport'
 
-export async function importAndAnalyseFiles (
+export async function analyseFiles (
 	req: Request, res: Response):Promise<void> {
 	try {
-		logger.info('Importing digiKam files')
-		await importDigiKamFileData()
-
 		logger.info('Analysing imported files')
 		await analyseInternalDBFiles()
 
-		logger.info('Files successfully imported and analysed')
-		res.send('Files successfully imported and analysed')
+		logger.info('Files successfully analysed')
+		res.send('Files successfully analysed')
 	} catch (err) {
 		logger.error(`${err}`)
 		res.status(500).send('Woops, there is an error')

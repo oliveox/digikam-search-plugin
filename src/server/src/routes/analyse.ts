@@ -1,8 +1,8 @@
 import express from 'express'
-import { importAndAnalyseFiles } from '../controllers/analyse'
+import { analyseInternalDBFiles } from '../services/analyse'
 
 const router = express.Router()
 
-router.get('/', importAndAnalyseFiles)
+router.get('/', analyseInternalDBFiles)
 
 export default router

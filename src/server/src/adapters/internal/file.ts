@@ -1,5 +1,4 @@
-import { Model, Op } from 'sequelize'
-import { any } from 'sequelize/types/lib/operators'
+import { Model, Op, QueryTypes } from 'sequelize'
 import logger from '../../config/winston'
 import { MetadataUtilsService } from '../../services/metadataUtils'
 import { FilesByLabelType, FManager } from '../../types/fManagerTypes'
@@ -181,8 +180,8 @@ export async function getVisualObjectsSearchConditions (visualObjects: Array<str
 
 	const videoFilesIdsQuery =
 		`select "fileId" from videos where objects ?| array[${[...visualObjectIds.map(id => `'${String(id)}'`)]}]`
-	result = await InternalDB.query(videoFilesIdsQuery)
-	const videoFileIds = result[0].map((e: any) => e.fileId)
+	result = await InternalDB.query(videoFilesIdsQuery, { type: QueryTypes.SELECT })
+	const videoFileIds = result.map((e: any) => e.fileId)
 
 	return [...imageFileIds, ...videoFileIds]
 }
