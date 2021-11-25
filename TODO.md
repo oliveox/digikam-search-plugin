@@ -1,7 +1,5 @@
 # TODO
-- search by contained objects
-- insert objects as tags inside DigiKam
-
+- create CLI
 - replace search menu nesting split character technique with a collection (e.g. json)
 - replace "categories" naming with "tags"
 - put URL requirment in requirments.txt for python service
@@ -32,6 +30,8 @@
 - restart Digikam after object analysis / DigiKam hot reload 
 
 # Done
+- insert objects as tags inside DigiKam
+- search by contained objects
 - remove all commented / unused code 
 - replace sqlite3 with sequelize
 - remove checksum determination for each file type
