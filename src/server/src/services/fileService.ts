@@ -10,42 +10,41 @@ class FileService {
     	const fileType = file.type
     	const filePath = file.filePath
     	const fileTypeEnum = GeneralUtilsService.fileTypeStringToEnum(fileType)
-        logger.info(`Extracting data from [${fileType}] file.`)
-        logger.debug(`Extracting data from from [${fileType}] 
+    	logger.info(`Extracting data from [${fileType}] file.`)
+    	logger.debug(`Extracting data from from [${fileType}] 
                                             file [${filePath}]`)
 
-        const fileTypeDataFetcher = getFileTypeDataFetcher(fileTypeEnum)
-        const fileData = await fileTypeDataFetcher(file)
+    	const fileTypeDataFetcher = getFileTypeDataFetcher(fileTypeEnum)
+    	const fileData = await fileTypeDataFetcher(file)
 
-        // filter metadata for each file type
-        if (fileData.metadata) {
-            let filter
-            const metadataToRemove: Array<string> =
+    	// filter metadata for each file type
+    	if (fileData.metadata) {
+    		let filter
+    		const metadataToRemove: Array<string> =
                                 config.metadataToBeRemoved[fileTypeEnum]
 
-            if (metadataToRemove && metadataToRemove.length > 0) {
-                // removal filter
-                filter = (key: string) => {
-                    for (const m of metadataToRemove) {
-                        if (key.startsWith(m)) return false
-                    }
-                    return true
-                }
-            }
+    		if (metadataToRemove && metadataToRemove.length > 0) {
+    			// removal filter
+    			filter = (key: string) => {
+    				for (const m of metadataToRemove) {
+    					if (key.startsWith(m)) return false
+    				}
+    				return true
+    			}
+    		}
 
-            fileData.metadata = FileUtilsService.formatAndFilterMetadataJSON
-            (
-                fileData.metadata,
-                fileType,
-                undefined,
-                filter
-            ) as AnyFileMetadata
-        }
+    		fileData.metadata = FileUtilsService.formatAndFilterMetadataJSON(
+    			fileData.metadata,
+    			fileType,
+    			undefined,
+    			filter
+    		) as AnyFileMetadata
+    	}
 
-        return {
-            type: fileType,
-            data: fileData
-        }
+    	return {
+    		type: fileType,
+    		data: fileData
+    	}
     }
 }
 

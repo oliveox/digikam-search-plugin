@@ -47,12 +47,9 @@ export const analyseInternalDBFiles = async () => {
 							persisting file [${filePath}]: ${err}`)
 		}
 	}
-
-	return
 }
 
-export const saveObjectsAndFetchIds = async (visualObjects: Array<string>): 
-											Promise<Map<string, number>>=> {
+export async function saveObjectsAndFetchIds (visualObjects: Array<string>): Promise<Map<string, number>> {
 	const objectsNameIdMap = new Map<string, number>()
 	if (visualObjects.length > 0) {
 		const formatedVisualObjects = visualObjects.map(o => { return { name: o } })

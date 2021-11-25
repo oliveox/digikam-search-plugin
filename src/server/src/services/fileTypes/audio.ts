@@ -1,5 +1,4 @@
 import FileType from 'file-type'
-import path from 'path'
 import logger from '../../config/winston'
 import { AnyFileMetadata, AudioData, FManager, FormatedFile }
 	from '../../types/fManagerTypes'

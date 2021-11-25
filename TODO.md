@@ -1,4 +1,5 @@
 # TODO
+- add unit tests
 - create CLI
 - replace search menu nesting split character technique with a collection (e.g. json)
 - replace "categories" naming with "tags"
