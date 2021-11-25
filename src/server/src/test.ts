@@ -1,6 +1,6 @@
 import { InternalDB } from './adapters/dbConnections'
 import { getVisualObjectsSearchConditions } from './adapters/internal/file'
-import { exportObjectsToDigiKam, importDigiKamFilesService } from './services/digikam'
+import { exportObjectsToDigiKamService, importDigiKamFilesService } from './services/digikam'
 
 const test_postgresInit = async () => {
 	try {
@@ -25,7 +25,7 @@ const play = () => {
 
 (async() => {
 	try {
-		await exportObjectsToDigiKam()
+		await exportObjectsToDigiKamService()
         // const fileIds = await getVisualObjectsSearchConditions(['kite', 'bird'])
 		// console.log(typeof play)
 		// await test_postgresInit();
