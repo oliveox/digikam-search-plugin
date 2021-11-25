@@ -152,6 +152,7 @@ dist/
 Notes
 workdir/
 declarations/
+src/ui/public/config
 
 
 ############ Machine Learning Servie
