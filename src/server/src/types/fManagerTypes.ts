@@ -1,9 +1,9 @@
-import { ExpandedTags } from "exifreader"
-import { IAudioMetadata } from "music-metadata"
-import ImageUtils from "../services/fileTypes/image"
-import VideoUtils from "../services/fileTypes/video"
-import AudioUtils from "../services/fileTypes/audio"
-import NotSupportedUtils from "../services/fileTypes/not_supported"
+import { ExpandedTags } from 'exifreader'
+import { IAudioMetadata } from 'music-metadata'
+import ImageUtils from '../services/fileTypes/image'
+import VideoUtils from '../services/fileTypes/video'
+import AudioUtils from '../services/fileTypes/audio'
+import NotSupportedUtils from '../services/fileTypes/not_supported'
 
 export type FileByType = {
     [key: string]: Array<string>
@@ -11,17 +11,17 @@ export type FileByType = {
 
 export namespace FManager {
     export enum FileType {
-        IMAGE="IMAGE",
-        VIDEO="VIDEO",
-        AUDIO="AUDIO",
-        NOT_SUPPORTED="NOT_SUPPORTED"
+        IMAGE='IMAGE',
+        VIDEO='VIDEO',
+        AUDIO='AUDIO',
+        NOT_SUPPORTED='NOT_SUPPORTED'
     }
 }
 
 export type AnalysedFileType = {
     filename: string,
     dirpath: string,
-    metadata: JSON, 
+    metadata: JSON,
     fileType: FManager.FileType
 }
 
@@ -86,21 +86,22 @@ export type FilesByLabelType = {
     uuid: string
 }
 
-export const fileTypesList: Array<string> = Object.keys(FManager.FileType);
+export const fileTypesList: Array<string> = Object.keys(FManager.FileType)
 
 export const getFileTypeDataFetcher = (fileType: FManager.FileType) => {
-    switch (fileType) {
-        case FManager.FileType.IMAGE:
-            return ImageUtils.getData;
-        case FManager.FileType.VIDEO:
-            return VideoUtils.getData;
-        case FManager.FileType.AUDIO:
-            return AudioUtils.getData;
-        case FManager.FileType.NOT_SUPPORTED:
-            return NotSupportedUtils.getData;
-        default:
-            return NotSupportedUtils.getData;
-    }
+	switch (fileType) {
+	case FManager.FileType.IMAGE:
+		return ImageUtils.getData
+	case FManager.FileType.VIDEO:
+		return VideoUtils.getData
+	case FManager.FileType.AUDIO:
+		return AudioUtils.getData
+	case FManager.FileType.NOT_SUPPORTED:
+		return NotSupportedUtils.getData
+	default:
+		return NotSupportedUtils.getData
+	}
 }
 
-// export const mediaTypesList: Array<string> = Object.keys(MediaType).filter(k => typeof MediaType[k as any] === "number");
+// export const mediaTypesList: Array<string> = Object.keys(MediaType).filter(
+// k => typeof MediaType[k as any] === "number");

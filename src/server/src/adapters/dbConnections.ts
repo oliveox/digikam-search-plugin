@@ -24,17 +24,18 @@ export const File = InternalDB.define('files', {
 	dirPath: { type: DataTypes.STRING, unique: false, allowNull: false },
 	fileName: { type: DataTypes.STRING, unique: false, allowNull: false },
 	deviceUUID: { type: DataTypes.STRING, unique: false, allowNull: false },
-	type: DataTypes.ENUM('IMAGE', 'AUDIO', 'VIDEO', 'NOT_SUPPORTED'),
+	type: DataTypes.ENUM('IMAGE', 'AUDIO', 'VIDEO', 'NOT_SUPPORTED')
 })
 
 export const VisualObject = InternalDB.define('objects', {
-	name: { type: DataTypes.TEXT, unique: true, allowNull: false}
+	name: { type: DataTypes.TEXT, unique: true, allowNull: false }
 })
 
 export const Image = InternalDB.define('images', {
-	objects: { 
+	objects: {
 		type: DataTypes.ARRAY(DataTypes.INTEGER),
-		unique: false, allowNull: true
+		unique: false,
+		allowNull: true
 	},
 	metadata: { type: DataTypes.JSONB, allowNull: true }
 })
@@ -45,7 +46,7 @@ export const Video = InternalDB.define('videos', {
 })
 
 export const Audio = InternalDB.define('audios', {
-	text: { type: DataTypes.TEXT, unique: false, allowNull: true},
+	text: { type: DataTypes.TEXT, unique: false, allowNull: true },
 	metadata: { type: DataTypes.JSONB, allowNull: true }
 })
 
@@ -56,12 +57,15 @@ export const NotSupported = InternalDB.define('unknowns', {
 export const Metadata = InternalDB.define('metadata_by_file_type', {
 	fileType: {
 		// TODO - get media file types from config
-		type: DataTypes.ENUM('IMAGE', 'AUDIO', 'VIDEO', 'NOT_SUPPORTED'), 
-		unique: true, allowNull: false, validate: {notEmpty: true}
+		type: DataTypes.ENUM('IMAGE', 'AUDIO', 'VIDEO', 'NOT_SUPPORTED'),
+		unique: true,
+		allowNull: false,
+		validate: { notEmpty: true },
 	},
 	metadata: {
-		type: DataTypes.JSONB, allowNull: false, 
-		validate: { notEmpty: true }
+		type: DataTypes.JSONB,
+		allowNull: false,
+		validate: { notEmpty: true },
 	}
 })
 
@@ -71,4 +75,3 @@ Image.belongsTo(File)
 Video.belongsTo(File)
 Audio.belongsTo(File)
 NotSupported.belongsTo(File)
-

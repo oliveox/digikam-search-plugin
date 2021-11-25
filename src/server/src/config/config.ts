@@ -172,9 +172,9 @@ export const config: ServerConfigurationType = {
 	videoStartPosition: 0,
 	videoAnalyseLength: 2,
 
-    digiKamRootTagPid: 0,
+	digiKamRootTagPid: 0,
 	digiKamObjectRootTagName: 'objects',
-	
+
 	// query
 	queriesArraySeparator: ', '
 }

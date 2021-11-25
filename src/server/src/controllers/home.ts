@@ -42,11 +42,6 @@ export async function getSearchedGalleryFiles (req: Request, res: Response): Pro
 	}
 }
 
-type VisualObjectData = {
-	id: number,
-	name: string
-}
-
 export async function getSearchMenu (
 	req: Request, res: Response): Promise<void> {
 	try {

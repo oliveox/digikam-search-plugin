@@ -6,7 +6,7 @@ import GeneralUtilsService from './generalUtils'
 import { config } from '../config/config'
 import logger from '../config/winston'
 
-async function importDigiKamFilesService () {
+export async function importDigiKamFilesService () {
 	const digiKamfiles: Array<any> = await DigiKamAdapter.getDigiKamFiles()
 	const promises: Array<any> = digiKamfiles.map(async (f) => {
 		const filePath = path.join(f.dirPath, f.fileName)
@@ -60,5 +60,3 @@ export async function exportObjectsToDigiKamService () {
 		}
 	}
 }
-
-export { importDigiKamFilesService as importDigiKamFilesService }
