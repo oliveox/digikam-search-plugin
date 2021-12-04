@@ -1,6 +1,7 @@
 import express from 'express'
 import { InternalDB } from './adapters/dbConnections.js'
 import { config } from './config/config'
+import logger from './config/winston.js'
 import analyseRouter from './routes/analyse'
 import displayRouter from './routes/display'
 import indexRouter from './routes/index'
@@ -12,12 +13,12 @@ const app = express()
 app.use(cors())
 
 app.use((req, res, next) => {
-	console.log('\n#####################')
-	console.log('new request made')
-	console.log(`host: ${req.hostname}`)
-	console.log(`path: ${req.path}`)
-	console.log(`method: ${req.method}`)
-	console.log('#####################\n')
+	logger.debug('\n#####################')
+	logger.debug('new request made')
+	logger.debug(`host: ${req.hostname}`)
+	logger.debug(`path: ${req.path}`)
+	logger.debug(`method: ${req.method}`)
+	logger.debug('#####################\n')
 
 	next()
 })
@@ -33,15 +34,15 @@ app.use((req, res) => {
 (async () => {
 	try {
 		await InternalDB.authenticate()
-		console.log('Internal DB connection ON')
+		logger.debug('Internal DB connection ON')
 
 		await InternalDB.sync()
-		console.log('Synchronized model with Internal DB')
+		logger.debug('Synchronized model with Internal DB')
 
 		app.listen(port, () => {
-			console.log(`Server is up at: ${port}`)
+			logger.info(`Server is up at: ${port}`)
 		})
 	} catch (err) {
-		console.log(`Can't conenct to Internal DB: ${err}`)
+		logger.info(`Can't conenct to Internal DB: ${err}`)
 	}
 })()
