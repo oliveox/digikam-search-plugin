@@ -3,8 +3,9 @@ import { config } from '../config/config'
 
 export const DigiKamDB = new Sequelize({
 	dialect: 'sqlite',
-	storage: config.digiKamSQLitePath
+	storage: config.digiKamSQLitePath,
 	// logging: console.log
+	logging: false
 })
 
 export const InternalDB = new Sequelize(
