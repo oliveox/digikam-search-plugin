@@ -1,11 +1,11 @@
 import { BinaryToTextEncoding } from 'crypto'
 
-require('dotenv').config()
-
 // find .env when run from other place than project root
 const envPath = process.env.ENV_PATH
 if (envPath) {
 	require('dotenv').config({ path: envPath })
+} else {
+	require('dotenv').config()
 }
 
 type ServerConfigurationType = {
