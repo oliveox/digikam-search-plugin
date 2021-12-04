@@ -1,6 +1,11 @@
 # TODO
-- add unit tests
 - create CLI
+- CLI features:
+    - import digikam files
+    - analyse digikam files
+    - export detected objects to digikam DB
+- docker compose deployment of NodeJS and Python server
+
 - replace search menu nesting split character technique with a collection (e.g. json)
 - replace "categories" naming with "tags"
 - put URL requirment in requirments.txt for python service
@@ -31,6 +36,7 @@
 - restart Digikam after object analysis / DigiKam hot reload 
 
 # Done
+- add unit tests
 - insert objects as tags inside DigiKam
 - search by contained objects
 - remove all commented / unused code 
