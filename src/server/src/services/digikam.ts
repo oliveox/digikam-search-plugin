@@ -5,8 +5,9 @@ import FileUtilsService from './fileUtils'
 import GeneralUtilsService from './generalUtils'
 import { config } from '../config/config'
 import logger from '../config/winston'
+import { ValidationError } from 'sequelize'
 
-export async function importDigiKamFilesService () {
+export async function importDigiKamDatabaseService () {
 	const digiKamfiles: Array<any> = await DigiKamAdapter.getDigiKamFiles()
 	const promises: Array<any> = digiKamfiles.map(async (f) => {
 		const filePath = path.join(f.dirPath, f.fileName)
@@ -25,9 +26,23 @@ export async function importDigiKamFilesService () {
 		}
 	})
 	const internalFormatFiles = await Promise.all(promises)
-	await File.bulkCreate(internalFormatFiles)
+
+	try {
+		await File.bulkCreate(internalFormatFiles)
+	} catch (e) {
+		if (e instanceof ValidationError) {
+			logger.error('Digikam file data already imported')
+		} else {
+			logger.error(`Unexpected error saving in internal database: [${e}]`)
+		}
+		throw e
+	}
 }
 
+type VisualObjectResult = {
+	id: number,
+	name: string
+}
 export async function exportObjectsToDigiKamService () {
 	const digiKamIdObjectIdsMap: Array<object> = await DigiKamAdapter.getDigiKamIdObjectsIdsMap()
 
@@ -35,7 +50,8 @@ export async function exportObjectsToDigiKamService () {
 		config.digiKamRootTagPid, config.digiKamObjectRootTagName
 	)
 
-	const visualObjectIdNameMap: Array<any> = await VisualObject.findAll({ attributes: ['id', 'name'], raw: true })
+	const visualObjectIdNameMap: Array<any> =
+			await VisualObject.findAll({ attributes: ['id', 'name'], raw: true })
 
 	for (const entry of digiKamIdObjectIdsMap) {
 		try {
@@ -46,9 +62,10 @@ export async function exportObjectsToDigiKamService () {
 				: [Number(objectIds)]
 
 			for (const visualObjectId of visualObjectIds) {
-				const visualObject = visualObjectIdNameMap.filter(e => e.id === visualObjectId)[0]
-				const visualObjectName = visualObject.name
+				const visualObject = visualObjectIdNameMap.find(e => e.id === visualObjectId)
+				const visualObjectName = visualObject?.name
 
+				if (!visualObjectName) throw Error(`Could not get visual object name for digiKamId:[${digiKamId}]`)
 				// insert visual object in digikam one by one
 				const tagId = await DigiKamAdapter.insertTag(digiKamObjectsTagRootPid, visualObjectName)
 
@@ -56,7 +73,7 @@ export async function exportObjectsToDigiKamService () {
 				await DigiKamAdapter.insertImageTag(Number(digiKamId), tagId)
 			}
 		} catch (err) {
-			logger.error(`Failed persisting image tags for digiKamIdObjectIdsMap:[${JSON.stringify(entry)}]`)
+			logger.error(`Failed persisting image tags for digiKamIdObjectIdsMap entry:[${JSON.stringify(entry)}]`)
 		}
 	}
 }

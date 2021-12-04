@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
 import logger from '../config/winston'
-import { exportObjectsToDigiKamService, importDigiKamFilesService } from '../services/digikam'
+import { exportObjectsToDigiKamService, importDigiKamDatabaseService } from '../services/digikam'
 
 export async function importDigiKamFiles (req: Request, res: Response):Promise<void> {
 	try {
 		logger.info('Importing digiKam files ... ')
 
-		await importDigiKamFilesService()
+		await importDigiKamDatabaseService()
 
 		const message = 'DigiKam files successfully imported'
 		logger.info(message)
