@@ -66,9 +66,10 @@ Run them in background or have 3 active dedicated terminals, your call.
 - DigiKam tags (also called *categories*) functionality doesn't work if tags contain '`_`' (underscores)
 - `Show in file manager` button doesn't normally work on Windows. The default security policy allows only administrators to create symbolic links.
 
-## Operating systems
+## Platforms
 - Linux (tested on Ubuntu 20.04)
 - Windows (tested on Windows 10)
+- WSL2
 
 ## Why does this repo exist?
 - learn / practice nodejs, reactjs and typescript
