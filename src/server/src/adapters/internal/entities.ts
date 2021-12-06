@@ -36,7 +36,7 @@ export const saveVideo = async (fileId: number, fileData: FileData) => {
 
 	Video.create({
 		fileId: fileId,
-		objects: Object.fromEntries(objectsIdFrameMap),
+		objects: Object.fromEntries(objectsIdFrameMap.entries()),
 		metadata: fileData.data.metadata
 	})
 }

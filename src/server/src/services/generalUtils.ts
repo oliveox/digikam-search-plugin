@@ -108,18 +108,23 @@ class GeneralUtilsService {
     }
 
     static getFullPathForFileModelObject = async (file: any) => {
-    	const deviceUUIIDMap: Map<string, string> =
-                                await GeneralUtilsService.getDeviceUUIDMap()
+		if (file.deviceUUID.startsWith('path=')) {
+			const filePath = path.join(file.dirPath, file.fileName)
+			return path.join(file.deviceUUID.split('path=')[1], filePath)
+		} else {
+			const deviceUUIIDMap: Map<string, string> =
+				await GeneralUtilsService.getDeviceUUIDMap() // TODO - cache result
 
-    	const filePath = path.join(file.dirPath, file.fileName)
-    	const UUID = file.deviceUUID.toLowerCase()
-    	const identifier = deviceUUIIDMap.get(UUID)
+			const filePath = path.join(file.dirPath, file.fileName)
+			const UUID = file.deviceUUID.toLowerCase()
+			const identifier = deviceUUIIDMap.get(UUID)
 
-    	if (!identifier) {
-			 throw new Error(`Could not find device identifer for UUID [${UUID}]`)
-    	}
+			if (!identifier) {
+				throw new Error(`Could not find device identifer for UUID [${UUID}]`)
+			}
 
-    	return path.join(identifier, filePath)
+			return path.join(identifier, filePath)
+		}
     }
 
     static getFullPathByPathAndUUID = async (filePath: string, UUID: string) => {
@@ -143,12 +148,17 @@ class GeneralUtilsService {
     		for (const device of blockdevides) {
     			const deviceUUID: string = device.uuid.toLowerCase()
     			const deviceIdentifier: string = device.identifier
+
+				if (!deviceUUID || !deviceIdentifier) {
+					throw new Error(`Could not determine UUID or identifier for device: [${JSON.stringify(device)}]`)
+				}
+
     			albumRootBlockDevicesUUIDs.set(deviceUUID, deviceIdentifier)
     		}
 
     		return albumRootBlockDevicesUUIDs
     	} catch (err) {
-    		logger.error('Could not fetch block devices UUIDs')
+    		logger.error(`Could not fetch block devices UUIDs: ${err}`)
     		throw err
     	}
     }

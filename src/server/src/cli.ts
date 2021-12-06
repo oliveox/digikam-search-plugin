@@ -31,9 +31,10 @@ async function main () {
 	try {
 		// import digikam files
 		if (options.import) {
-			logger.info('Importing digikam database ...')
 			try {
+				logger.info('Importing digikam database ...')
 				await importDigiKamDatabaseService()
+				logger.info('Successfully imported digikam database')
 			} catch (e) {
 				if (!(e instanceof ValidationError)) return
 			}
@@ -43,12 +44,14 @@ async function main () {
 		if (options.analyse) {
 			logger.info('Analysing internal db files ...')
 			await analyseInternalDBFiles()
+			logger.info('Successfully analysed internal db files')
 		}
 
 		// export objects to digikam
 		if (options.export) {
 			logger.info('Exporting objects to digikam ...')
 			await exportObjectsToDigiKamService()
+			logger.info('Successfully exported objects to digikam')
 		}
 	} catch (e) {
 		logger.error(`Error: ${e}`)

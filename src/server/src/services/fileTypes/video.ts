@@ -1,15 +1,13 @@
 import FileType from 'file-type'
 import fs from 'fs'
 import path from 'path'
+import { getObjectsInMediaFile } from '../../adapters/machineLearning'
 import { config } from '../../config/config'
 import logger from '../../config/winston'
 import { AnyFileMetadata, FManager, FormatedFile, VideoData } from '../../types/fManagerTypes'
 import GeneralUtilsService from '../generalUtils'
 const ffprobe = require('ffprobe-client')
-
 const shell = require('any-shell-escape')
-const axios = require('axios').default
-const FormData = require('form-data')
 
 class VideoUtils {
     static getData = async (file: FormatedFile): Promise<VideoData> => {
@@ -66,22 +64,9 @@ class VideoUtils {
 
     	let objects = []
     	try {
-    		const form = new FormData()
-    		form.append('file_path', filePath)
-
-    		// TODO - make lower case both in python and nodejs
-    		form.append('file_type', FManager.FileType.VIDEO.toLowerCase())
-    		// TODO - ml service configurable url and port
-    		const response = await axios.post('http://localhost:5000/', form,
-    			{ headers: form.getHeaders() })
-
-    		if (response.status !== '200') {
-    			throw new Error(`Failed to fetch video objects. Got a ${response.status} status`)
-    		}
-
-    		objects = response.data
+    		objects = await getObjectsInMediaFile(filePath, FManager.FileType.VIDEO)
     	} catch (err) {
-    		logger.error(`Could not fetch objects for file [${filePath}]`)
+    		logger.error(`Could not fetch objects for file [${filePath}]: ${err}`)
     	}
 
     	// get file metadata

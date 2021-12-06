@@ -43,27 +43,32 @@ type ServerConfigurationType = {
     digiKamObjectRootTagName: string,
     digiKamRootTagPid: number,
 
-	queriesArraySeparator: string
+	queriesArraySeparator: string,
+
+	mlServerIP: string,
+	mlServerPort: string,
 }
 
 export const config: ServerConfigurationType = {
 	// env vars
-	port: process.env.SERVER_PORT ? process.env.SERVER_PORT : '',
-	// mediaRootPath: process.env.MEDIA_ROOT_PATH ? process.env.MEDIA_ROOT_PATH : "",
-	databaseUri: process.env.DATABASE_URI ? process.env.DATABASE_URI : '',
-	databaseName: process.env.DATABASE_NAME ? process.env.DATABASE_NAME : '',
-	databaseUser: process.env.DATABASE_USER ? process.env.DATABASE_USER : '',
-	databasePassword: process.env.DATABASE_PASSWORD ? process.env.DATABASE_PASSWORD : '',
-	digiKamSQLitePath: process.env.DIGIKAM_SQLITE_DB_PATH ? process.env.DIGIKAM_SQLITE_DB_PATH : '',
+	port: process.env.SERVER_PORT || '',
+	databaseUri: process.env.DATABASE_URI || '',
+	databaseName: process.env.DATABASE_NAME || '',
+	databaseUser: process.env.DATABASE_USER || '',
+	databasePassword: process.env.DATABASE_PASSWORD || '',
+	digiKamSQLitePath: process.env.DIGIKAM_SQLITE_DB_PATH || '',
 
 	// config folder path
-	configFolderPath: process.env.CONFIG_FOLDER_PATH ? process.env.CONFIG_FOLDER_PATH : '/tmp',
+	configFolderPath: process.env.CONFIG_FOLDER_PATH || '/tmp',
 
-	displayFolderPath: process.env.DISPLAY_FOLDER_PATH ? process.env.DISPLAY_FOLDER_PATH : '/tmp/display',
+	displayFolderPath: process.env.DISPLAY_FOLDER_PATH || '/tmp/display',
 
-	fileManager: process.env.FILE_MANAGER ? process.env.FILE_MANAGER : 'explorer',
+	fileManager: process.env.FILE_MANAGER || 'explorer',
 
-	configFolderName: process.env.CONFIG_FOLDER_NAME ? process.env.CONFIG_FOLDER_NAME : 'config',
+	configFolderName: process.env.CONFIG_FOLDER_NAME || 'config',
+
+	mlServerIP: process.env.ML_SERVER_IP || 'localhost',
+	mlServerPort: process.env.ML_SERVER_PORT || '5000',
 
 	// non-env vars
 	displayedMetadata: {
@@ -176,5 +181,5 @@ export const config: ServerConfigurationType = {
 	digiKamObjectRootTagName: 'objects',
 
 	// query
-	queriesArraySeparator: ', '
+	queriesArraySeparator: ', ',
 }

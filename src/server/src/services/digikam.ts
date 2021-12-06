@@ -11,9 +11,13 @@ export async function importDigiKamDatabaseService () {
 	const digiKamfiles: Array<any> = await DigiKamAdapter.getDigiKamFiles()
 	const promises: Array<any> = digiKamfiles.map(async (f) => {
 		const filePath = path.join(f.dirPath, f.fileName)
-		const fullFilePath = await GeneralUtilsService.getFullPathByPathAndUUID(
-			filePath, f.deviceUUID
-		)
+
+		const fullFilePath = (<string> f.deviceUUID).startsWith('path=') 
+			? 
+			path.join(f.deviceUUID.split('path=')[1], filePath)
+			:
+			await GeneralUtilsService.getFullPathByPathAndUUID(filePath, f.deviceUUID)
+
 		const type = await FileUtilsService.getFileType(fullFilePath)
 
 		return {

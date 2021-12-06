@@ -5,8 +5,7 @@ import FileUtilsService from './fileUtils'
 import GeneralUtilsService from './generalUtils'
 
 class FileService {
-    // static extractFileData = async (filePath: string, fileType: string) => {
-    static extractFileData = async (file: FormatedFile) : Promise<FileData> => {
+    static async extractFileData (file: FormatedFile) : Promise<FileData> {
     	const fileType = file.type
     	const filePath = file.filePath
     	const fileTypeEnum = GeneralUtilsService.fileTypeStringToEnum(fileType)

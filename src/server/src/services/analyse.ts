@@ -8,7 +8,7 @@ import GeneralUtilsService from './generalUtils'
 const { Op } = require('sequelize')
 
 export const analyseInternalDBFiles = async () => {
-	const files: Array<any> = await File.findAll()
+	const files: Array<any> = await File.findAll({ raw: true })
 	const promises = files.map(async (f): Promise<FormatedFile> => {
 		return {
 			id: f.id,

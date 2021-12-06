@@ -1,17 +1,16 @@
 import ExifReader from 'exifreader'
 import FileType from 'file-type'
 import path from 'path'
+import { getObjectsInMediaFile } from '../../adapters/machineLearning'
 import { config } from '../../config/config'
 import logger from '../../config/winston'
 import { AnyFileMetadata, FManager, FormatedFile, ImageData } from '../../types/fManagerTypes'
 import GeneralUtilsService from '../generalUtils'
-
-const FormData = require('form-data')
 const sharp = require('sharp')
 const fs = require('fs').promises
-const axios = require('axios').default
 
 class ImageUtils {
+
     static getData = async (file: FormatedFile): Promise<ImageData> => {
     	const filePath = file.filePath
     	const hash = file.hash
@@ -58,7 +57,7 @@ class ImageUtils {
     		await fs.promises.access(thumbnailFilePath)
     		logger.warn(`Image already has GIF thumbnail. 
             Image: [${filePath}]. Thumbnail: [${thumbnailFilePath}]`)
-    	} catch(err) {
+    	} catch (err) {
     		thumbnailExists = false
     	}
 
@@ -73,21 +72,7 @@ class ImageUtils {
 
     	let objects = []
     	try {
-    		const form = new FormData()
-    		form.append('file_path', filePath)
-
-    		// TODO - make lower case both in python and nodejs
-    		form.append('file_type', FManager.FileType.IMAGE.toLowerCase())
-    		// TODO - ml service configurable url and port
-    		const response = await axios.post('http://localhost:5000/', form, 
-    			{ headers: form.getHeaders() })
-            
-    		if (response.status != '200') {
-    			throw new Error(`Failed to fetch image objects. Got a ${response.status} status`)
-    		}
-    			
-
-    		objects = response.data
+    		objects = await getObjectsInMediaFile(filePath, FManager.FileType.IMAGE)
     	} catch (err) {
     		logger.error(`Could not fetch objects for file [${filePath}]`)
     	}
