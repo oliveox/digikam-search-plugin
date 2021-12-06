@@ -1,4 +1,6 @@
 # TODO
+- ml / backend server api docs
+- treat various types of UUIDs representations in DigiKam DB (wsl / nix / windows)
 - docker compose deployment of NodeJS and Python server
 - benchmark various processes
 - replace search menu nesting split character technique with a collection (e.g. json)

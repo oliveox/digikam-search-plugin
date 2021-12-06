@@ -47,10 +47,9 @@ Run them in background or have 3 active dedicated terminals, your call.
 	- enter the other parameters required in *.env*
 	- `npm install typescript`
 	- `tsc`
-	- `npm install`
 	- the *sqlite3* npm project (a *sequelize* dependency) comes with high risk vulenrabilities and doesn't get the updates pushed on its github repo. Solution:
-		- `git clone https://github.com/mapbox/node-sqlite3.git`
-		- `npm install node-sqlite3`
+		- `git clone https://github.com/mapbox/node-sqlite3.git`\
+	- `npm install`
 	- `npm start`
 3. **Machine learning server**
 	- `cd $REPO_PATH/src/machine learning`
