@@ -14,6 +14,6 @@
       "noEmitOnError": true,
       "watch": true
     },
-    "include": ["./src"],
-    "exclude": ["node_modules", "tests"]
+    "include": ["./src", "./tests"],
+    "exclude": ["node_modules"]
 }
