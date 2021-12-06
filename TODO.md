@@ -1,11 +1,6 @@
 # TODO
-- create CLI
-- CLI features:
-    - import digikam files
-    - analyse digikam files
-    - export detected objects to digikam DB
 - docker compose deployment of NodeJS and Python server
-
+- benchmark various processes
 - replace search menu nesting split character technique with a collection (e.g. json)
 - replace "categories" naming with "tags"
 - put URL requirment in requirments.txt for python service
@@ -36,6 +31,7 @@
 - restart Digikam after object analysis / DigiKam hot reload 
 
 # Done
+- has WSL2 support
 - add unit tests
 - insert objects as tags inside DigiKam
 - search by contained objects
@@ -52,3 +48,8 @@
 - fix server memory leak (continoush worker spawning)
 - extract / store frameNr - objects map
 - React UI
+- create CLI
+- CLI features:
+    - import digikam files
+    - analyse digikam files
+    - export detected objects to digikam DB
