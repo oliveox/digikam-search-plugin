@@ -1,7 +1,8 @@
 # TODO
-- ml / backend server api docs
-- treat various types of UUIDs representations in DigiKam DB (wsl / nix / windows)
 - docker compose deployment of NodeJS and Python server
+    - images: backend, ml, postgres
+- restart Digikam after object analysis / DigiKam hot reload
+- ml / backend server api docs
 - benchmark various processes
 - replace search menu nesting split character technique with a collection (e.g. json)
 - replace "categories" naming with "tags"
@@ -30,7 +31,6 @@
 - add types to Python code
 - logging to file and console
 - support for multiple Digikam root albums
-- restart Digikam after object analysis / DigiKam hot reload 
 
 # Done
 - has WSL2 support
@@ -52,6 +52,7 @@
 - React UI
 - create CLI
 - CLI features:
-    - import digikam files
+    - import digikam files  
     - analyse digikam files
     - export detected objects to digikam DB
+- treat various types of UUIDs representations in DigiKam DB (wsl / nix / windows)
