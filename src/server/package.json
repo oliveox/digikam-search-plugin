@@ -30,7 +30,7 @@
     "poolifier": "^1.2.1",
     "sequelize": "^6.3.5",
     "sharp": "^0.26.1",
-    "sqlite3": "file:node-sqlite3",
+    "sqlite3": "github:mapbox/node-sqlite3",
     "systeminformation": "^5.9.8",
     "threads": "^1.6.3",
     "winston": "^3.3.3"
