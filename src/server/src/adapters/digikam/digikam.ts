@@ -2,7 +2,7 @@ import path from 'path'
 import { QueryTypes, UniqueConstraintError } from 'sequelize'
 import url from 'url'
 import logger from '../../config/winston'
-import { FilesByLabelType } from '../../types/fManagerTypes'
+import { FilesByLabelType, UuidType, UuidTypeReturn } from '../../types/fManagerTypes'
 import { DigiKamDB, InternalDB } from '../dbConnections'
 import { config } from '../../config/config'
 
@@ -24,7 +24,7 @@ class DigiKamAdapter {
     		return tree
     	} else {
     		// root categories have parentId = 0
-    		const result = await DigiKamAdapter.getCategoriesTree(0) 
+    		const result = await DigiKamAdapter.getCategoriesTree(0)
     		return result
     	}
     }
@@ -36,7 +36,7 @@ class DigiKamAdapter {
     	// label -> TagID -> ImageID -> filename, folderID -> filename, folder
     	const filenamesAndDirs: Array<FilesByLabelType> =
                         await DigiKamUtils.getFilesAndFoldersByLabels(labels)
-    	const albumRootIdentifierPathMap = 
+    	const albumRootIdentifierPathMap =
                             await DigiKamUtils.getAlbumRootIdentifierPathMap()
 
     	const validPaths: Array<FilesByLabelType> = []
@@ -47,7 +47,7 @@ class DigiKamAdapter {
     		const fileName = e.name
     		const deviceUUID = e.identifier.split('uuid=')[1]
     		const devicePath = albumRootIdentifierPathMap[deviceUUID.toLowerCase()]
-            
+
     		const dirPath = path.join(devicePath, e.dirPath)
 
     		// workaround white-space escaping for fs.stat
@@ -57,7 +57,7 @@ class DigiKamAdapter {
     		try {
     			const stats = await fs.stat(filePath)
     			if (!stats.isDirectory()) validPaths.push(
-    				{ 
+    				{
     					fileName: e.name,
     					dirPath: e.dirPath,
     					uuid: deviceUUID
@@ -97,7 +97,7 @@ class DigiKamAdapter {
     			throw e
     		}
     	}
-		
+
     	return result
     }
 
@@ -124,26 +124,39 @@ class DigiKamAdapter {
     	)
     	return result
     }
+
+    static getUuidType (uuid: string): UuidTypeReturn {
+    	return uuid.startsWith('path=')
+    		? {
+    			type: UuidType.folderPath,
+    			path: uuid.split('path=')[1]
+    		  }
+    		: {
+    			type: UuidType.device,
+    			path: null
+    		  }
+    }
 }
 
-
 class DigiKamUtils {
-    
+
     static getAlbumRootIdentifierPathMap = async () => {
-        
+
     	const albumRootIdentifierPathMap: any = {}
     	let albumRootIdenfitiers
     	try {
     		albumRootIdenfitiers = await DigiKamUtils.getAlbumRootIdentifiers()
 
-    		if (!albumRootIdenfitiers || albumRootIdenfitiers.length == 0) 
-    			throw 'No album root identifiers found.'
+    		if (!(albumRootIdenfitiers?.length)) {
+    			throw new Error('No album root identifiers found')
+    		}
+    			
     	} catch (err) {
     		logger.error(`Could not fetch DigiKam album root identifiers: ${err}`)
     		throw err
     	}
 
-    	const albumRootBlockDevicesUUIDs: Array<string> = 
+    	const albumRootBlockDevicesUUIDs: Array<string> =
                                 <Array<string>> albumRootIdenfitiers?.map(
                                 	i => i.split('uuid=')[1].toLowerCase()
                                 )
@@ -172,11 +185,11 @@ class DigiKamUtils {
     	)
     	return result.map(label => Object.values(label)[0])
     }
-    
-    static getOneTagTreeLevel = async (parentID: number): 
+
+    static getOneTagTreeLevel = async (parentID: number):
                                                 Promise<Array<string>> => {
 
-    	const results: any = 
+    	const results: any =
             await DigiKamDB.query(getOneTagTreeLevelQuery, {
             	replacements: [parentID],
             	type: QueryTypes.SELECT
@@ -196,11 +209,11 @@ class DigiKamUtils {
     	return results.map(label => Object.values(label)[0])[0]
     }
 
-    static getFilesAndFoldersByLabels = async (labels: Array<string>): 
+    static getFilesAndFoldersByLabels = async (labels: Array<string>):
                                         Promise<Array<any>> => {
     	const placeholder: string = labels.map(() => '?').join(',')
     	const query = DigiKamUtils.getFilesByLabels(placeholder)
-    	const result = await DigiKamDB.query(query, 
+    	const result = await DigiKamDB.query(query,
     		{replacements: [labels], type: QueryTypes.SELECT}
     	)
     	return result
@@ -287,12 +300,12 @@ select name from Tags
 where id = ?
 `
 
-const getAlbumRootsIdentifiersQuery = 
+const getAlbumRootsIdentifiersQuery =
 `
 select identifier from AlbumRoots
 `
 
-const getAllDigiKamFilesQuery = 
+const getAllDigiKamFilesQuery =
 `
 select t3.id, t4.specificPath || t3.relativePath as dirPath, t3.name as fileName, ltrim(t4.identifier, "volumeid:?uuid=") as deviceUUID, t3.uniqueHash as hash from
 (select t1.id, t1.uniqueHash, t1.name, t2.relativePath, t2.albumRoot from

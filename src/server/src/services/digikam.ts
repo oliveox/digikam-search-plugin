@@ -6,17 +6,22 @@ import GeneralUtilsService from './generalUtils'
 import { config } from '../config/config'
 import logger from '../config/winston'
 import { ValidationError } from 'sequelize'
+import { UuidType, UuidTypeReturn } from '../types/fManagerTypes'
 
 export async function importDigiKamDatabaseService () {
 	const digiKamfiles: Array<any> = await DigiKamAdapter.getDigiKamFiles()
 	const promises: Array<any> = digiKamfiles.map(async (f) => {
 		const filePath = path.join(f.dirPath, f.fileName)
 
-		const fullFilePath = (<string> f.deviceUUID).startsWith('path=') 
-			? 
-			path.join(f.deviceUUID.split('path=')[1], filePath)
-			:
-			await GeneralUtilsService.getFullPathByPathAndUUID(filePath, f.deviceUUID)
+		const uuid: UuidTypeReturn = DigiKamAdapter.getUuidType(f.deviceUUID)
+		let fullFilePath
+		if (uuid.type === UuidType.folderPath && uuid.path) {
+			fullFilePath = path.join(uuid.path, filePath)
+		} else if (uuid.type === UuidType.device) {
+			fullFilePath = await GeneralUtilsService.getFullPathByPathAndUUID(filePath, f.deviceUUID)
+		} else {
+			throw new Error(`Could not determine UUID type for file [${JSON.stringify(f)}]`)
+		}
 
 		const type = await FileUtilsService.getFileType(fullFilePath)
 
@@ -43,10 +48,6 @@ export async function importDigiKamDatabaseService () {
 	}
 }
 
-type VisualObjectResult = {
-	id: number,
-	name: string
-}
 export async function exportObjectsToDigiKamService () {
 	const digiKamIdObjectIdsMap: Array<object> = await DigiKamAdapter.getDigiKamIdObjectsIdsMap()
 

@@ -1,7 +1,8 @@
 import { exec } from 'child_process'
 import path from 'path'
+import DigiKamAdapter from '../adapters/digikam/digikam'
 import logger from '../config/winston'
-import { FilesByType, FManager } from '../types/fManagerTypes'
+import { FilesByType, FManager, UuidType, UuidTypeReturn } from '../types/fManagerTypes'
 const si = require('systeminformation')
 
 class GeneralUtilsService {
@@ -108,24 +109,26 @@ class GeneralUtilsService {
     }
 
     static getFullPathForFileModelObject = async (file: any) => {
-		if (file.deviceUUID.startsWith('path=')) {
-			const filePath = path.join(file.dirPath, file.fileName)
-			return path.join(file.deviceUUID.split('path=')[1], filePath)
-		} else {
-			const deviceUUIIDMap: Map<string, string> =
+    	const uuid: UuidTypeReturn = DigiKamAdapter.getUuidType(file.deviceUUID)
+    	if (uuid.type === UuidType.folderPath && uuid.path) {
+    		return path.join(uuid.path, file.dirPath, file.fileName)
+    	} else if (uuid.type === UuidType.device) {
+    		const deviceUUIIDMap: Map<string, string> =
 				await GeneralUtilsService.getDeviceUUIDMap() // TODO - cache result
 
-			const filePath = path.join(file.dirPath, file.fileName)
-			const UUID = file.deviceUUID.toLowerCase()
-			const identifier = deviceUUIIDMap.get(UUID)
+    		const filePath = path.join(file.dirPath, file.fileName)
+    		const UUID = file.deviceUUID.toLowerCase()
+    		const identifier = deviceUUIIDMap.get(UUID)
 
-			if (!identifier) {
-				throw new Error(`Could not find device identifer for UUID [${UUID}]`)
-			}
+    		if (!identifier) {
+    			throw new Error(`Could not find device identifer for UUID [${UUID}]`)
+    		}
 
-			return path.join(identifier, filePath)
-		}
-    }
+    		return path.join(identifier, filePath)
+    	} else {
+    		throw new Error(`Could not determine UUID type for file [${JSON.stringify(file)}]`)
+    	}
+	}
 
     static getFullPathByPathAndUUID = async (filePath: string, UUID: string) => {
     	const deviceUUIIDMap: Map<string, string> =
@@ -149,9 +152,9 @@ class GeneralUtilsService {
     			const deviceUUID: string = device.uuid.toLowerCase()
     			const deviceIdentifier: string = device.identifier
 
-				if (!deviceUUID || !deviceIdentifier) {
-					throw new Error(`Could not determine UUID or identifier for device: [${JSON.stringify(device)}]`)
-				}
+    			if (!deviceUUID || !deviceIdentifier) {
+    				throw new Error(`Could not determine UUID or identifier for device: [${JSON.stringify(device)}]`)
+    			}
 
     			albumRootBlockDevicesUUIDs.set(deviceUUID, deviceIdentifier)
     		}

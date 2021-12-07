@@ -18,6 +18,16 @@ export namespace FManager {
     }
 }
 
+export enum UuidType {
+    folderPath='FOLDER_PATH',
+    device='DEVICE'
+}
+
+export type UuidTypeReturn = {
+    type: UuidType,
+    path: string | null
+}
+
 export type AnalysedFileType = {
     filename: string,
     dirpath: string,
