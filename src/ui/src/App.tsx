@@ -2,39 +2,46 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import CheckboxTree from './CheckBoxTree/CheckBoxTree';
+import ControlPanel from './Components/ControlPanel';
+import SearchMenu from './Components/SearchMenu';
 import Gallery from './Gallery/Gallery';
 
 type SearchTypes = {
   metadata: Array<any>,
-  categories: Array<any>
+  categories: Array<any>,
+  visualObjects: Array<any>
 }
 
 type AppState = {
-  searchOptions: SearchTypes,
+  // searchOptions: SearchTypes,
   mediaUnits: Array<any>,
-  textFieldSearch: string,
-  checkedMetadata: Array<any>,
-  checkedCategories: Array<any>,
-  checkedVisualObjects: Array<any>,
+  // textFieldSearch: string,
+  // checkedMetadata: Array<any>,
+  // checkedCategories: Array<any>,
+  // checkedVisualObjects: Array<any>,
   error: string,
-  uploadFiles: Array<any>
+  // uploadFiles: Array<any>
 };
 
 class App extends React.Component<{}, AppState> {
 
-  state = {
-    searchOptions: {metadata: [], categories: [], visualObjects: []},
-    mediaUnits: [],
-    textFieldSearch: "",
-    checkedMetadata: [],
-    checkedCategories: [],
-    checkedVisualObjects: [],
-    error: "",
-    uploadFiles: []
+  constructor (props: any) {
+    super(props)
+    this.state = {
+      // searchOptions: { metadata: [], categories: [], visualObjects: [] },
+      mediaUnits: [],
+      // textFieldSearch: "",
+      // checkedMetadata: [],
+      // checkedCategories: [],
+      // checkedVisualObjects: [],
+      error: "",
+      // uploadFiles: []
+    }
   }
+  
 
   componentDidMount() {
-    fetch("http://localhost:3001/gallery")
+    fetch(`http://${process.env.REACT_APP_IP}:3001/gallery`)
     .then(res => res.json())
     .then(res => {
       this.setState({
@@ -43,67 +50,43 @@ class App extends React.Component<{}, AppState> {
     })
     .catch(err => this.setState({error: err}))
 
-    fetch("http://localhost:3001/menu")
-    .then(res => res.json())
-    .then(res => {
-      this.setState({
-        searchOptions: res
-      })
-    })
-    .catch(err => this.setState({error: err}))
+    // fetch("http://localhost:3001/menu")
+    // .then(res => res.json())
+    // .then(res => {
+    //   this.setState({
+    //     searchOptions: res
+    //   })
+    // })
+    // .catch(err => this.setState({error: err}))
   }
 
-  onTextFieldSearchHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const searchTerm = event.target.value;
-    this.setState({textFieldSearch: searchTerm}, this.getGallery);
-  }
+  // onTextFieldSearchHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const searchTerm = event.target.value;
+  //   this.setState({textFieldSearch: searchTerm}, this.getGallery);
+  // }
 
-  onMetadataSearchHandler = (checked: Array<any>) => {
-    this.setState({checkedMetadata: checked}, this.getGallery);
-  }
+  // onFilesUploadBrowseHandler = (event: any) => {
+  //   this.setState({
+  //     uploadFiles: event.target.files
+  //   })
+  // }
 
-  onCategorySearchHandler = (checked: Array<any>) => {
-    this.setState({checkedCategories: checked}, this.getGallery);
-  }
+  getGallery = (searchOptions: any) => {
 
-  onVisualObjectsSearchHandler = (checked: Array<any>) => {
-    this.setState({checkedVisualObjects: checked}, this.getGallery);
-  }
-
-  onFileManagerButtonClick = () => {
-    const displayedFilepaths = this.state.mediaUnits.map((m: any) => m.filePath);
-    
-    const requestOptions = {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(displayedFilepaths)
-    }
-
-    fetch("http://localhost:3001/display", requestOptions);
-  }
-
-  onFilesUploadBrowseHandler = (event: any) => {
-    this.setState({
-      uploadFiles: event.target.files
-    })
-  }
-
-  getGallery = () => {
-
-    let body = {
-      textField: this.state.textFieldSearch,
-      metadata: this.state.checkedMetadata,
-      categories: this.state.checkedCategories,
-      visualObjects: this.state.checkedVisualObjects
-    };
+    // let body = {
+    //   textField: this.state.textFieldSearch,
+    //   metadata: this.state.checkedMetadata,
+    //   categories: this.state.checkedCategories,
+    //   visualObjects: this.state.checkedVisualObjects
+    // };
 
     const requestOptions = {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(body)
+      body: JSON.stringify(searchOptions)
     }
 
-    fetch("http://localhost:3001/gallery", requestOptions)
+    fetch(`http://${process.env.REACT_APP_IP}:3001/gallery`, requestOptions)
     .then(res => res.json())
     .then(res => this.setState({mediaUnits: res}))
   }
@@ -114,28 +97,17 @@ class App extends React.Component<{}, AppState> {
 
     // SEARCH MENU
 
-    // search text
-    let searchBar = (
-      <div>
-        <input 
-            type="text" 
-            value={this.state.textFieldSearch}
-            placeholder="search by filename ... "
-            onChange={this.onTextFieldSearchHandler}
-        />
-      </div>
-    );
-
-    let openInFileManager= (
-      <div>
-        <Button 
-          variant="dark"
-          onClick={this.onFileManagerButtonClick}
-        >
-          Show in File Manager
-        </Button>{' '}
-      </div>
-    )
+    // // search text
+    // let searchBar = (
+    //   <div>
+    //     <input 
+    //         type="text" 
+    //         value={this.state.textFieldSearch}
+    //         placeholder="search by filename ... "
+    //         onChange={this.onTextFieldSearchHandler}
+    //     />
+    //   </div>
+    // );
 
     // error message
     if (this.state.error) {
@@ -147,52 +119,15 @@ class App extends React.Component<{}, AppState> {
     }
 
     // checkboxes
-    const searchMenuData = this.state.searchOptions;
-    let metadataSearchMenu;
-    let categoriesSearchMenu;
-    let visualObjectsMenu;
+    // const searchMenuData = this.state.searchOptions;
+    // let metadataSearchMenu;
+    // let categoriesSearchMenu;
+    // let visualObjectsMenu;
     
-    if (searchMenuData) {
+    // if (searchMenuData) {
        
-      metadataSearchMenu = searchMenuData.metadata ? 
-       (
-        <React.Fragment>
-          <CheckboxTree 
-            nodes={searchMenuData.metadata} 
-            onlyLeafCheckboxes={true}
-            checkHandler={this.onMetadataSearchHandler}
-          />
-        </React.Fragment>
-       ) 
-       : 
-       null;
-
-       categoriesSearchMenu = searchMenuData.categories ? 
-       (
-        <React.Fragment>
-          <CheckboxTree 
-            nodes={searchMenuData.categories} 
-            onlyLeafCheckboxes={false}
-            checkHandler={this.onCategorySearchHandler}
-          />
-        </React.Fragment>
-       ) 
-       : 
-       null;
-
-       visualObjectsMenu = searchMenuData.visualObjects ? 
-       (
-        <React.Fragment>
-          <CheckboxTree 
-            nodes={searchMenuData.visualObjects} 
-            onlyLeafCheckboxes={false}
-            checkHandler={this.onVisualObjectsSearchHandler}
-          />
-        </React.Fragment>
-       ) 
-       : 
-       null;
-    }
+      
+    // }
 
     return (
       <Container fluid>
@@ -208,16 +143,11 @@ class App extends React.Component<{}, AppState> {
         <Row>
           <Col sm={3} className="border-right">
             <br></br>
-              {searchBar}
+              <ControlPanel mediaUnits={ this.state.mediaUnits }/>
             <br></br>
-              {openInFileManager}
-            <br></br>
-              <h4>Metadata</h4>
-                {metadataSearchMenu}
-              <h4>Categories</h4>
-                {categoriesSearchMenu}
-              <h4>Objects</h4>
-                {visualObjectsMenu}
+              <SearchMenu 
+                  updateGallery={this.getGallery.bind(this)}
+              />
           </Col>
           <Col sm={9}>
             <Gallery 

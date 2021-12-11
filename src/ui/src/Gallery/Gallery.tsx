@@ -10,8 +10,7 @@ type MediaUnits = {
     mediaUnits: Array<MediaUnit>
 }
 
-const Gallery = (props: MediaUnits) => {
-
+export default function Gallery (props: MediaUnits) {
     const gallery = (
             <div className="row text-center text-lg-left">
             {
@@ -54,7 +53,4 @@ const Gallery = (props: MediaUnits) => {
     );
 
     return gallery;                
-
 }
-
-export default Gallery;
