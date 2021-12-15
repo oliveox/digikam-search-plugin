@@ -2,9 +2,11 @@ import express from 'express'
 import { InternalDB } from './adapters/dbConnections.js'
 import { config } from './config/config'
 import logger from './config/winston.js'
-import analyseRouter from './routes/analyse'
-import displayRouter from './routes/display'
-import indexRouter from './routes/index'
+import { getAlldGalleryFiles, getSearchedGalleryFiles, getSearchMenu } from './controllers/home.js'
+import bodyParser from 'body-parser'
+import { analyseInternalDBFiles } from './services/analyse.js'
+import displayInFileExplorer from './controllers/display.js'
+import { exportObjectsToDigiKam, importDigiKamFiles } from './controllers/digikam.js'
 const cors = require('cors')
 
 const port = config.port || 3001
@@ -23,9 +25,21 @@ app.use((req, res, next) => {
 	next()
 })
 
-app.use('/', indexRouter)
-app.use('/analyse', analyseRouter)
-app.use('/display', displayRouter)
+app.get('/gallery', getAlldGalleryFiles)
+app.post('/gallery', bodyParser.text({ type: '*/*' }), getSearchedGalleryFiles)
+
+app.get('/menu', getSearchMenu)
+
+app.get('/analyse', analyseInternalDBFiles)
+app.post('/display', bodyParser.text({ type: '*/*' }), displayInFileExplorer)
+
+app.get('/digikam/import', importDigiKamFiles)
+app.get('/digikam/exportObjects', exportObjectsToDigiKam)
+
+// app.use('/', indexRouter)
+// app.use('/analyse', analyseRouter)
+// app.use('/display', displayRouter)
+// app.use('/digikam', digikamRouter)
 
 app.use((req, res) => {
 	res.status(404).send('Woops, no such page here')
