@@ -22,7 +22,7 @@
     "exifreader": "^4.0.0",
     "express": "^4.17.1",
     "ffprobe-client": "^1.1.6",
-    "file-type": "^15.0.1",
+    "file-type": "^16.5.4",
     "form-data": "latest",
     "music-metadata": "^7.4.0",
     "pg": "^8.7.1",
